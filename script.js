@@ -22,29 +22,30 @@ var macTemplate = {
   "class": "draggableItem",
   "id": "item",
   "header": {
-    "class": "draggableItemHeader",
-    "id": "itemHeader",
-    "text": ".mac",
-    "padding": "10px",
-    "cursor": "move",
-    "z-index": "10",
-    "background-color": "#FFFFFF",
-    "border": "#000000",
-    "border-style": "none none double none",
-    "border-width": "none none medium none",
-    "color": "#000000"
+    "header-class": "draggableItemHeader",
+    "header-id": "itemHeader",
+    "header-text": ".mac",
+    "header-padding": "10px",
+    "header-cursor": "move",
+    "header-z-index": "10",
+    "header-background-color": "#FFFFFF",
+    "header-border": "#000000",
+    "header-border-style": "none none double none",
+    "header-border-width": "none none medium none",
+    "header-color": "#000000",
+    "header-pointer-events": "none"
   },
   "img": "mac.jpg",
   "footer": {
-    "class": "draggableItemFooter",
-    "id": "itemFooter",
-    "border": "#000000",
-    "background-color": "#FFFFFF",
-    "z-index": "10",
-    "padding": "10px",
-    "border-style": "solid none none none",
-    "border-top-width": "medium",
-    "color": "#000000"
+    "footer-class": "draggableItemFooter",
+    "footer-id": "itemFooter",
+    "footer-border": "#000000",
+    "footer-background-color": "#FFFFFF",
+    "footer-z-index": "10",
+    "footer-padding": "10px",
+    "footer-border-style": "solid none none none",
+    "footer-border-top-width": "medium",
+    "footer-color": "#000000"
   },
   "touch-action": "none",
   "user-select": "none",
@@ -111,6 +112,7 @@ function addMacElements(template, num){
     newMacHeader.style.borderStyle = template['header']['header-border-style'];
     newMacHeader.style.borderWidth = template['header']['header-border-width'];
     newMacHeader.style.color = template['header']['header-color'];
+    newMacHeader.style.pointerEvents = template['header']['header-pointer-events'];
     newMacElement.appendChild(newMacHeader);
 
     let newMacImage = document.createElement("IMG");
