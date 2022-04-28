@@ -135,7 +135,7 @@ body{
   )
 }
 
-.draggableItemheader {
+.draggableItemHeader {
   padding: 10px;
   cursor: move;
   z-index: 10;
@@ -145,7 +145,7 @@ body{
   border-width: none none medium none;
   color: #000000;
 }
-.draggableItemfooter {
+.draggableItemFooter {
   padding: 10px;
   z-index: 10;
   background-color: #FFFFFF;
