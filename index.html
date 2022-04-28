@@ -7,28 +7,44 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div id="container">
-      <div class="draggableItem" id="itemA">
-        <div class="draggableItemheader" id="itemAheader">.mac1</div>
-        <img src="mac.jpg" alt="">
-        <div class="draggableItemfooter" id="itemAfooter"></div>
+    <div id="outercontainer">
+      <div class="navbar">
+        <a href="#home">Home</a>
+        <a href="#news">News</a>
+        <div class="dropdown">
+          <button class="dropbtn">Dropdown
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="#">Link 1</a>
+            <a href="#">Link 2</a>
+            <a href="#">Link 3</a>
+          </div>
+        </div>
       </div>
+      <div id="container">
+        <div class="draggableItem" id="itemA">
+          <div class="draggableItemheader" id="itemAheader">.mac1</div>
+          <img src="mac.jpg" alt="">
+          <div class="draggableItemfooter" id="itemAfooter"></div>
+        </div>
 
-      <div class="draggableItem" id="itemB">
-        <div class="draggableItemheader" id="itemBheader">.mac2</div>
-        <img src="mac.jpg" alt="">
-        <div class="draggableItemfooter" id="itemBfooter"></div>
-      </div>
+        <div class="draggableItem" id="itemB">
+          <div class="draggableItemheader" id="itemBheader">.mac2</div>
+          <img src="mac.jpg" alt="">
+          <div class="draggableItemfooter" id="itemBfooter"></div>
+        </div>
 
-      <div class="draggableItem" id="itemC">
-        <div class="draggableItemheader" id="itemCheader">.mac3</div>
-        <img src="mac.jpg" alt="">
-        <div class="draggableItemfooter" id="itemCfooter"></div>
-      </div>
-      <div class="draggableItem" id="itemD">
-        <div class="draggableItemheader" id="itemDheader">.mac4</div>
-        <img src="mac.jpg" alt="">
-        <div class="draggableItemfooter" id="itemDfooter"></div>
+        <div class="draggableItem" id="itemC">
+          <div class="draggableItemheader" id="itemCheader">.mac3</div>
+          <img src="mac.jpg" alt="">
+          <div class="draggableItemfooter" id="itemCfooter"></div>
+        </div>
+        <div class="draggableItem" id="itemD">
+          <div class="draggableItemheader" id="itemDheader">.mac4</div>
+          <img src="mac.jpg" alt="">
+          <div class="draggableItemfooter" id="itemDfooter"></div>
+        </div>
       </div>
     </div>
     <script src="script.js"></script>
