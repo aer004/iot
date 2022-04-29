@@ -64,9 +64,34 @@ document.addEventListener("DOMContentLoaded", function(){
   container = document.querySelector("#container");
   startLink = document.querySelector("#startlink");
   startLink.addEventListener("mouseup", function(){
-    console.log("MOUSE UP!!");
-    addMacElements(macTemplate, 4);
+    // console.log("Before IF");
+    // if (dragItems != null){
+    //   console.log("BEFORE LOOP");
+    //   perm_length = dragItems.length
+    //   for (let i = 0; i < perm_length; i++){
+    //     console.log("item: ", item);
+    //     dragItems[i].remove();
+    //     //item.remove();
+    //     console.log("REMOVE");
+    //     console.log("dragItems loop!!!: ", dragItems);
+    //   }
+    //   console.log("dragItems after!!!: ", dragItems);
+    //   // for (item of dragItems){
+    //   //   console.log("item: ", item);
+    //   //   item.remove();
+    //   //    console.log("REMOVE");
+    //   // }
+    // }
+
+    while (container.hasChildNodes()) {
+      container.removeChild(container.firstChild);
+    }
+
+    num_mac = (Math.floor(Math.random() * (10/2)) * 2) + 4; //min = 4 max = 10
+    addMacElements(macTemplate, num_mac);
+    console.log("BEFORE ADDING ITEMS");
     dragItems = document.getElementsByClassName("draggableItem");
+    console.log("AFTER ADDING ITEMS");
 
     /*Adds addEventListeners to all items with class "draggableItem"*/
     for (item of dragItems) {
@@ -86,6 +111,7 @@ document.addEventListener("DOMContentLoaded", function(){
       };
       draggableData.push(newDraggableData);
     };
+    console.log("END OF LISTENER");
   });
   window.addEventListener("click", print);
 });
@@ -110,7 +136,6 @@ function addMacElements(template, num){
     newHeaderId = template['header']['header-id'] + i.toString();
     newMacHeader.setAttribute("id", newHeaderId);
     newMacHeader.innerText = template['header']['header-text'] + i.toString();
-    console.log(newMacHeader);
     newMacHeader.style.padding = template['header']['header-padding'];
     newMacHeader.style.cursor = template['header']['header-cursor'];
     newMacHeader.style.zIndex = template['header']['header-z-index'];
