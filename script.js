@@ -1,6 +1,7 @@
 /* PROF NOTE: Updated to be an array of all dragItem class objects */
 var dragItems;
 var container;
+var startLink;
 
 /* PROF NOTE: Now that we have multiple draggable items we need a way to
               store their modified position properties. We can use ann array of JSON */
@@ -36,6 +37,8 @@ var macTemplate = {
     "header-pointer-events": "none"
   },
   "img": "mac.jpg",
+  "img-pointer-events": "none",
+  "img-padding": "10px",
   "footer": {
     "footer-class": "draggableItemFooter",
     "footer-id": "itemFooter",
@@ -58,52 +61,56 @@ var macTemplate = {
 }
 
 document.addEventListener("DOMContentLoaded", function(){
-  dragItems = document.getElementsByClassName("draggableItem");
   container = document.querySelector("#container");
-  window.addEventListener("click", print);
+  startLink = document.querySelector("#startlink");
+  startLink.addEventListener("mouseup", function(){
+    console.log("MOUSE UP!!");
+    addMacElements(macTemplate, 4);
+    dragItems = document.getElementsByClassName("draggableItem");
 
-  /*Adds addEventListeners to all items with class "draggableItem"*/
-  for (item of dragItems) {
-    item.addEventListener("touchstart", dragStart, false); //calls dragStart
-    item.addEventListener("touchend", dragEnd, false); //calls dragEnd
-    item.addEventListener("touchmove", drag, false); //calls drag
+    /*Adds addEventListeners to all items with class "draggableItem"*/
+    for (item of dragItems) {
+      item.addEventListener("touchstart", dragStart, false); //calls dragStart
+      item.addEventListener("touchend", dragEnd, false); //calls dragEnd
+      item.addEventListener("touchmove", drag, false); //calls drag
 
-    item.addEventListener("mousedown", dragStart, false);
-    item.addEventListener("mouseup", dragEnd, false);
-    item.addEventListener("mousemove", drag, false);
+      item.addEventListener("mousedown", dragStart, false);
+      item.addEventListener("mouseup", dragEnd, false);
+      item.addEventListener("mousemove", drag, false);
 
-    /* Adding an entry to our draggableData storage */
-    var newDraggableData = {
-      "elementReference": item,
-      "offset_x": 0,
-      "offset_y": 0,
+      /* Adding an entry to our draggableData storage */
+      var newDraggableData = {
+        "elementReference": item,
+        "offset_x": 0,
+        "offset_y": 0,
+      };
+      draggableData.push(newDraggableData);
     };
-    draggableData.push(newDraggableData);
-  };
-
+  });
+  window.addEventListener("click", print);
 });
-/*
+
 function addMacElements(template, num){
-  for (let i = 1; i =< num; i++) {
+  for (let i = 1; i <= num; i++) {
     let newMacElement = document.createElement("DIV");
     newMacElement.classList.add(template['class']);
-    newId = template['id'] + num.toString();
-    newMacElement.setAttribute("id", "newId");
+    newId = template['id'] + i.toString();
+    newMacElement.setAttribute("id", newId);
     newMacElement.style.touchAction = template['touch-action'];
     newMacElement.style.userSelect = template['user-select'];
     newMacElement.style.margin = template['margin'];
     newMacElement.style.backgroundColor = template['background-color'];
     newMacElement.style.border = template['border'];
-    newMacElement.style.borderWidth: template['border-width'];
-    newMacElement.style.textAlign: template['text-align'];
-    newMacElement.style.clipPath: template['clip-path'];
+    newMacElement.style.borderWidth = template['border-width'];
+    newMacElement.style.textAlign = template['text-align'];
+    newMacElement.style.clipPath = template['clip-path'];
 
-    //NOT CALLING RIGTH VALUES!! template['header]['header-class']';
     let newMacHeader = document.createElement("DIV");
     newMacHeader.classList.add(template['header']['header-class']);
-    newHeaderId = template['header']['header-id'] + num.toString();
-    newMacHeader.style.setAttribute("id", "newHeaderId");
-    newMacHeader.style.innerText = template['header']['header-text'] + num.toString();
+    newHeaderId = template['header']['header-id'] + i.toString();
+    newMacHeader.setAttribute("id", newHeaderId);
+    newMacHeader.innerText = template['header']['header-text'] + i.toString();
+    console.log(newMacHeader);
     newMacHeader.style.padding = template['header']['header-padding'];
     newMacHeader.style.cursor = template['header']['header-cursor'];
     newMacHeader.style.zIndex = template['header']['header-z-index'];
@@ -117,25 +124,27 @@ function addMacElements(template, num){
 
     let newMacImage = document.createElement("IMG");
     newMacImage.src = template['img'];
+    //newClassoverImg = document.querySelector("draggableItem > img");
+    newMacImage.pointerEvents = template['img-pointer-events'];
+    newMacImage.style.padding = template['img-padding'];
     newMacElement.appendChild(newMacImage);
 
     let newMacFooter = document.createElement("DIV");
     newMacFooter.classList.add(template['footer']['footer-class']);
-    newFooterID = template['footer']['footer-id'] + num.toString();
+    newFooterId = template['footer']['footer-id'] + i.toString();
+    newMacFooter.setAttribute("id", newFooterId);
     newMacFooter.style.border = template['footer']['footer-border'];
     newMacFooter.style.backgroundColor = template['footer']['footer-background-color'];
     newMacFooter.style.zIndex = template['footer']['footer-z-index'];
     newMacFooter.style.padding = template['footer']['footer-padding'];
     newMacFooter.style.borderStyle = template['footer']['footer-border-style'];
-    newMacFooter.style.borderTopWidth = template['footer']['footer-'border-top-width];
+    newMacFooter.style.borderTopWidth = template['footer']['footer-border-top-width'];
     newMacFooter.style.color = template['footer']['footer-color'];
     newMacElement.appendChild(newMacFooter);
 
     container.appendChild(newMacElement);
-
   }
 }
-*/
 
 function print(){
   console.log("HELLLLLLLLLLLO)");
@@ -251,6 +260,33 @@ If two items overlap, and they are supposed to, they get set with green borders
 if they aren't supposed to, they get set with red borders.
 Items that have no overlap have black borders.
 */
+/*CHANGE TO INCLUDE GENERTAED DIVS:
+  depending on the number of genearted divs (always even), create list with numbers from 1 to x
+  using Fisher-Yates Shuffle (?) to shuffle list
+
+  function shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
+  }
+
+  Code from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+
+  Split list into tuples, each tuples being the 'match'
+*/
+
 function checkOverlap(el) {
   var flag_items = {
     "itemA": "False",
