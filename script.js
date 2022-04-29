@@ -1,10 +1,7 @@
-/* PROF NOTE: Updated to be an array of all dragItem class objects */
 var dragItems;
 var container;
 var startLink;
 
-/* PROF NOTE: Now that we have multiple draggable items we need a way to
-              store their modified position properties. We can use ann array of JSON */
 var draggableData = [];
 
 var active = false;
@@ -15,8 +12,6 @@ var initialY;
 var xOffset = 0;
 var yOffset = 0;
 
-/* PROF NOTE: The "drag" listener will fire on all overlapping elements simultaneously,
-              so we need a way to check which our initially clicked element was */
 var initialDragElem;
 
 var macTemplate = {
@@ -60,6 +55,9 @@ var macTemplate = {
   "clip-path": "polygon(0 0, 0 0, 98% 0, 100% 2%, 100% 100%, 100% 100%, 2% 100%, 0% 98%, 0% 0%)"
 }
 
+//THINGS TO DO:
+//* Make divs load only in area inside 'desktop'
+//* Update checkOverlap function so that it matchs random tuples from list
 document.addEventListener("DOMContentLoaded", function(){
   container = document.querySelector("#container");
   startLink = document.querySelector("#startlink");
@@ -89,9 +87,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     num_mac = (Math.floor(Math.random() * (10/2)) * 2) + 4; //min = 4 max = 10
     addMacElements(macTemplate, num_mac);
-    console.log("BEFORE ADDING ITEMS");
     dragItems = document.getElementsByClassName("draggableItem");
-    console.log("AFTER ADDING ITEMS");
 
     /*Adds addEventListeners to all items with class "draggableItem"*/
     for (item of dragItems) {
