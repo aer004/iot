@@ -107,6 +107,7 @@ body{
   background-image: url("desktop.png");
   background-repeat: repeat;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   overflow: hidden;

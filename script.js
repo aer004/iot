@@ -58,6 +58,8 @@ var macTemplate = {
 //THINGS TO DO:
 //* Make divs load only in area inside 'desktop'
 //* Update checkOverlap function so that it matchs random tuples from list
+var num_mac = Math.floor(Math.random() * (10 - 4) + 4); //min = 4 max = 8
+num_mac = (Math.floor(num_mac / 2)) * 2;
 document.addEventListener("DOMContentLoaded", function(){
   container = document.querySelector("#container");
   startLink = document.querySelector("#startlink");
@@ -85,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function(){
       container.removeChild(container.firstChild);
     }
 
-    num_mac = (Math.floor(Math.random() * (10/2)) * 2) + 4; //min = 4 max = 10
+    mac_tuple = mac_pairs(num_mac);
     addMacElements(macTemplate, num_mac);
     dragItems = document.getElementsByClassName("draggableItem");
 
@@ -307,13 +309,30 @@ Items that have no overlap have black borders.
 
   Split list into tuples, each tuples being the 'match'
 */
+var mac_index = [];
+var mac_tuple = [];
+function mac_pairs(num_mac) {
+  for (let i = 1; i <= num_mac; i++){
+    mac_index.push('item' + i);
+  }
+  let curr_i = mac_index.length, rand_i;
+  while (curr_i != 0){
+    rand_i = Math.floor(Math.random() * curr_i);
+    curr_i--;
+
+    [mac_index[curr_i], mac_index[rand_i]] = [mac_index[rand_i], mac_index[curr_i]];
+  }
+  for (let i = 0; i < num_mac; i += 2){
+     mac_tuple.push([mac_index[i], mac_index[i + 1]])
+  }
+  return mac_tuple;
+}
+
 
 function checkOverlap(el) {
-  var flag_items = {
-    "item1": "False",
-    "item2": "False",
-    "item3": "False",
-    "item4": "False"
+  var flag_items = {}
+  for (let i = 0; i < num_mac; i++){
+    flag_items[mac_index[i]] = "False";
   }
   /* CHECK FOR OVERLAP */
   for (item of dragItems) {
@@ -349,61 +368,91 @@ function checkOverlap(el) {
       */
       /* PROF NOTE: Here we confirm the overlap and can fire off specific behavior based
                   on the matching IDs */
-      if (overlap) {
-        // console.log("Overlapping: " + item.id + " and " + e.target.id);
-        if ((item.id == "item1" && el.id == "item2") || (item.id == "item2" && el.id == "item1")){
-          console.log("1 AND 2 ARE OVERLAPPING, COOL!");
-          itemA.style.borderColor = "#00ee00"; //green
-          itemB.style.borderColor = "#00ee00";
-          flag_items["item1"] = "True";
-          flag_items["item2"] = "True";
+      for (let i = 0; i < num_mac; i += 2){
+        itemA = document.getElementById(mac_index[i]);
+        itemB = document.getElementById(mac_index[i+1]);
+        if (overlap){
+          if ((item.id == mac_index[i] && el.id == mac_index[i + 1]) || (item.id == mac_index[i + 1] && el.id == mac_index[i])){
+            console.log(mac_index[i], " and ",mac_index[i + 1], " ARE OVERLAPPING");
+            itemA.style.borderColor = "#00ee00"; //green
+            itemB.style.borderColor = "#00ee00";
+            flag_items[mac_index[i]] = "True";
+            flag_items[mac_index[i + 1]] = "True";
+          }
+          else if ((item.id == mac_index[i] && el.id != mac_index[i + 1]) || (item.id != mac_index[i + 1] || el.id == mac_index[i])){
+            console.log(mac_index[i], " and ",mac_index[i + 1], " ARE OVERLAPPING, BUT NOT MATCHING");
+            itemA.style.borderColor = "#dd0000"; //red
+            itemB.style.borderColor = "#dd0000"; //red
+            flag_items[mac_index[i]] = "True";
+            flag_items[mac_index[i + 1]] = "True";
+          }
         }
-        else if ((item.id == "item2" && el.id == "item3") || (item.id == "item3" && el.id == "item2")){
-          console.log("Hey, now 2 and 3 are overlapping.");
-          itemB.style.borderColor = "#dd0000"; //red
-          itemC.style.borderColor = "#dd0000";
-          flag_items["item2"] = "True";
-          flag_items["item3"] = "True";
-        }
-        else if ((item.id == "item1" && el.id == "item3") || (item.id == "item3" && el.id == "item1")){
-          console.log("And now we've got an overlap between A and C!");
-          itemC.style.borderColor = "#dd0000";
-          itemA.style.borderColor = "#dd0000";
-          flag_items["item1"] = "True";
-          flag_items["item3"] = "True";
-        }
-        else if ((item.id == "item4" && el.id == "item3") || (item.id == "item3" && el.id == "item4")){
-          console.log("C D OVERLAP");
-          itemC.style.borderColor = "#00ee00";
-          itemD.style.borderColor = "#00ee00";
-          flag_items["item4"] = "True";
-          flag_items["item3"] = "True";
-        }
-        else if ((item.id == "item4" && el.id == "item2") || (item.id == "item2" && el.id == "item4")){
-          console.log("2 4 OVERLAP");
-          itemB.style.borderColor = "#dd0000";
-          itemD.style.borderColor = "#dd0000";
-          flag_items["item2"] = "True";
-          flag_items["item4"] = "True";
-        }
-        else if ((item.id == "item4" && el.id == "item1") || (item.id == "item1" && el.id == "item4")){
-          console.log("1 4 OVERLAP");
-          itemA.style.borderColor = "#dd0000";
-          itemD.style.borderColor = "#dd0000";
-          flag_items["item1"] = "True";
-          flag_items["item4"] = "True";
-        }
-      }
-      if (!overlap) {
-        console.log("NOT OVERLAPPING");
+        if (!overlap){
+          console.log("NOT OVERLAPPING");
 
-        if (flag_items[item.id] == "False"){
-          item.style.borderColor = "#000000";
-        }
-        if (flag_items[el.id] == "False"){
-          el.style.borderColor = "#000000";
+          if (flag_items[item.id] == "False"){
+            item.style.borderColor = "#000000";
+          }
+          if (flag_items[el.id] == "False"){
+            el.style.borderColor = "#000000";
+          }
         }
       }
+      // if (overlap) {
+      //   console.log("Overlapping: " + item.id + " and " + e.target.id);
+      //   if ((item.id == "item1" && el.id == "item2") || (item.id == "item2" && el.id == "item1")){
+      //     console.log("1 AND 2 ARE OVERLAPPING, COOL!");
+      //     item1.style.borderColor = "#00ee00"; //green
+      //     item2.style.borderColor = "#00ee00";
+      //     flag_items["item1"] = "True";
+      //     flag_items["item2"] = "True";
+      //   }
+      //   else if ((item.id == "item2" && el.id == "item3") || (item.id == "item3" && el.id == "item2")){
+      //     console.log("Hey, now 2 and 3 are overlapping.");
+      //     item2.style.borderColor = "#dd0000"; //red
+      //     item3.style.borderColor = "#dd0000";
+      //     flag_items["item2"] = "True";
+      //     flag_items["item3"] = "True";
+      //   }
+      //   else if ((item.id == "item1" && el.id == "item3") || (item.id == "item3" && el.id == "item1")){
+      //     console.log("And now we've got an overlap between A and C!");
+      //     item3.style.borderColor = "#dd0000";
+      //     item1.style.borderColor = "#dd0000";
+      //     flag_items["item1"] = "True";
+      //     flag_items["item3"] = "True";
+      //   }
+      //   else if ((item.id == "item4" && el.id == "item3") || (item.id == "item3" && el.id == "item4")){
+      //     console.log("C D OVERLAP");
+      //     item3.style.borderColor = "#00ee00";
+      //     item4.style.borderColor = "#00ee00";
+      //     flag_items["item4"] = "True";
+      //     flag_items["item3"] = "True";
+      //   }
+      //   else if ((item.id == "item4" && el.id == "item2") || (item.id == "item2" && el.id == "item4")){
+      //     console.log("2 4 OVERLAP");
+      //     item2.style.borderColor = "#dd0000";
+      //     item4.style.borderColor = "#dd0000";
+      //     flag_items["item2"] = "True";
+      //     flag_items["item4"] = "True";
+      //   }
+      //   else if ((item.id == "item4" && el.id == "item1") || (item.id == "item1" && el.id == "item4")){
+      //     console.log("1 4 OVERLAP");
+      //     item1.style.borderColor = "#dd0000";
+      //     item4.style.borderColor = "#dd0000";
+      //     flag_items["item1"] = "True";
+      //     flag_items["item4"] = "True";
+      //   }
+      // }
+      // if (!overlap) {
+      //   console.log("NOT OVERLAPPING");
+      //
+      //   if (flag_items[item.id] == "False"){
+      //     item.style.borderColor = "#000000";
+      //   }
+      //   if (flag_items[el.id] == "False"){
+      //     el.style.borderColor = "#000000";
+      //   }
+      // }
     }
   }
 }
