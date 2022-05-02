@@ -368,36 +368,66 @@ function checkOverlap(el) {
       */
       /* PROF NOTE: Here we confirm the overlap and can fire off specific behavior based
                   on the matching IDs */
-      for (let i = 0; i < num_mac; i += 2){
-        itemA = document.getElementById(mac_index[i]);
-        itemB = document.getElementById(mac_index[i+1]);
-        if (overlap){
-          if ((item.id == mac_index[i] && el.id == mac_index[i + 1]) || (item.id == mac_index[i + 1] && el.id == mac_index[i])){
-            console.log(mac_index[i], " and ",mac_index[i + 1], " ARE OVERLAPPING");
-            itemA.style.borderColor = "#00ee00"; //green
-            itemB.style.borderColor = "#00ee00";
-            flag_items[mac_index[i]] = "True";
-            flag_items[mac_index[i + 1]] = "True";
+      if (overlap){
+        itemA = document.getElementById(item.id);
+        itemB = document.getElementById(el.id);
+        for (let i = 0; i < mac_tuple.length; i++){
+          if ((item.id == mac_tuple[i][0]) || (item.id == mac_tuple[i][1])) {
+            if ((el.id == mac_tuple[i][0]) || (el.id == mac_tuple[i][1])) {
+              itemA.style.borderColor = "#00ee00"; //green
+              itemB.style.borderColor = "#00ee00";
+              flag_items[item.id] = "True";
+              flag_items[el.id] = "True";
+            }
           }
-          else if ((item.id == mac_index[i] && el.id != mac_index[i + 1]) || (item.id != mac_index[i + 1] || el.id == mac_index[i])){
-            console.log(mac_index[i], " and ",mac_index[i + 1], " ARE OVERLAPPING, BUT NOT MATCHING");
+          else {
             itemA.style.borderColor = "#dd0000"; //red
             itemB.style.borderColor = "#dd0000"; //red
-            flag_items[mac_index[i]] = "True";
-            flag_items[mac_index[i + 1]] = "True";
-          }
-        }
-        if (!overlap){
-          console.log("NOT OVERLAPPING");
-
-          if (flag_items[item.id] == "False"){
-            item.style.borderColor = "#000000";
-          }
-          if (flag_items[el.id] == "False"){
-            el.style.borderColor = "#000000";
+            flag_items[item.id] = "True";
+            flag_items[el.id] = "True";
           }
         }
       }
+      if (!overlap){
+        console.log("NOT OVERLAPPING");
+
+        if (flag_items[item.id] == "False"){
+          item.style.borderColor = "#000000";
+        }
+        if (flag_items[el.id] == "False"){
+          el.style.borderColor = "#000000";
+        }
+      }
+      // for (let i = 0; i < num_mac; i += 2){
+      //   itemA = document.getElementById(mac_index[i]);
+      //   itemB = document.getElementById(mac_index[i+1]);
+      //   if (overlap){
+      //     if ((item.id == mac_index[i] && el.id == mac_index[i + 1]) || (item.id == mac_index[i + 1] && el.id == mac_index[i])){
+      //       console.log(mac_index[i], " and ",mac_index[i + 1], " ARE OVERLAPPING");
+      //       itemA.style.borderColor = "#00ee00"; //green
+      //       itemB.style.borderColor = "#00ee00";
+      //       flag_items[mac_index[i]] = "True";
+      //       flag_items[mac_index[i + 1]] = "True";
+      //     }
+      //     else if ((item.id == mac_index[i] && el.id != mac_index[i + 1]) || (item.id != mac_index[i + 1] || el.id == mac_index[i])){
+      //       console.log(mac_index[i], " and ",mac_index[i + 1], " ARE OVERLAPPING, BUT NOT MATCHING");
+      //       itemA.style.borderColor = "#dd0000"; //red
+      //       itemB.style.borderColor = "#dd0000"; //red
+      //       flag_items[mac_index[i]] = "True";
+      //       flag_items[mac_index[i + 1]] = "True";
+      //     }
+      //   }
+      //   if (!overlap){
+      //     console.log("NOT OVERLAPPING");
+      //
+      //     if (flag_items[item.id] == "False"){
+      //       item.style.borderColor = "#000000";
+      //     }
+      //     if (flag_items[el.id] == "False"){
+      //       el.style.borderColor = "#000000";
+      //     }
+      //   }
+      // }
       // if (overlap) {
       //   console.log("Overlapping: " + item.id + " and " + e.target.id);
       //   if ((item.id == "item1" && el.id == "item2") || (item.id == "item2" && el.id == "item1")){
