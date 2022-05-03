@@ -282,6 +282,7 @@ function addArticleElements(articleTemplate, articleLinks, index){
   newArticleElement.style.borderWidth = articleTemplate['border-width'];
   newArticleElement.style.textAlign = articleTemplate['text-align'];
   newArticleElement.style.clipPath = articleTemplate['clip-path'];
+  newArticleElement.style.position = 'fixed';
 
   let newArticleHeader = document.createElement("DIV");
   newArticleHeader.classList.add(articleTemplate['header']['header-class']);
@@ -323,12 +324,13 @@ function addArticleElements(articleTemplate, articleLinks, index){
   newArticleElement.appendChild(newArticleFooter);
 
   //WHYYY dont it work???
-  let x = document.body.offsetHeight-newArticleElement.clientHeight;
-	let y = document.body.offsetWidth-newArticleElement.clientWidth;
+  let x = document.body.offsetHeight - newArticleElement.offsetHeight;
+	let y = document.body.offsetWidth - newArticleElement.offsetWidth;
 	let randomX = Math.floor(Math.random()*x);
 	let randomY = Math.floor(Math.random()*y);
 
-  newArticleElement.style.transform = "translate3d(" + randomX + "px, " + randomY + "px, 0)";
+  newArticleElement.style.top = randomX + "px";
+  newArticleElement.style.left = randomY + "px";
 
   container.appendChild(newArticleElement);
 }
