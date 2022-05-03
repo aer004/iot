@@ -56,13 +56,13 @@ var macTemplate = {
 };
 
 var articleTemplate = {
-  "class": "draggableArticle",
+  "class": "draggableItem",
   "id": "article",
   "header": {
     "header-class": "draggableArticleHeader",
     "header-id": "articleHeader",
     "header-text": "",
-    "header-padding": "10px",
+    "header-padding": "15px",
     "header-cursor": "move",
     "header-z-index": "10",
     "header-background-color": "#FFFFFF",
@@ -189,7 +189,26 @@ document.addEventListener("DOMContentLoaded", function(){
   window.addEventListener("click", function(){
     if (mac_print_flag == "True"){
       addArticleElements(articleTemplate, articleLinks, article_index);
+      let new_id = articleTemplate['id'] + article_index.toString();
+      let article_item = document.getElementById(new_id);
+      dragItems = document.getElementsByClassName("draggableItem");
+      console.log(dragItems);
       article_index += 1;
+      article_item.addEventListener("touchstart", dragStart, false); //calls dragStart
+      article_item.addEventListener("touchend", dragEnd, false); //calls dragEnd
+      article_item.addEventListener("touchmove", drag, false); //calls drag
+
+      article_item.addEventListener("mousedown", dragStart, false);
+      article_item.addEventListener("mouseup", dragEnd, false);
+      article_item.addEventListener("mousemove", drag, false);
+
+      /* Adding an entry to our draggableData storage */
+      var newDraggableData = {
+        "elementReference": article_item,
+        "offset_x": 0,
+        "offset_y": 0,
+      };
+      draggableData.push(newDraggableData);
     };
   });
 });
@@ -246,7 +265,6 @@ function addMacElements(template, num){
     newMacElement.appendChild(newMacFooter);
 
     container.appendChild(newMacElement);
-    mac_print_flag = "True";
   }
 }
 
@@ -287,6 +305,7 @@ function addArticleElements(articleTemplate, articleLinks, index){
 
   let newArticleLink = document.createElement("A");
   newArticleLink.setAttribute("href", articleLinks[index]['link']);
+  newArticleLink.appendChild(newArticleBody);
   newArticleElement.appendChild(newArticleLink);
 
 
@@ -303,12 +322,20 @@ function addArticleElements(articleTemplate, articleLinks, index){
   newArticleFooter.style.color = articleTemplate['footer']['footer-color'];
   newArticleElement.appendChild(newArticleFooter);
 
+  //WHYYY dont it work???
+  let x = document.body.offsetHeight-newArticleElement.clientHeight;
+	let y = document.body.offsetWidth-newArticleElement.clientWidth;
+	let randomX = Math.floor(Math.random()*x);
+	let randomY = Math.floor(Math.random()*y);
+
+  newArticleElement.style.transform = "translate3d(" + randomX + "px, " + randomY + "px, 0)";
+
   container.appendChild(newArticleElement);
 }
 
 
 function dragStart(e) {
-
+  mac_print_flag = "True";
   console.log("Drag START on: " + e.target.id);
 
   if (!active) {
@@ -380,7 +407,7 @@ function dragEnd(e) {
 function drag(e) {
   if (active) {
 
-    // console.log("Dragging: " + e.target.id);
+    console.log("Dragging: " + e.target.id);
 
     e.preventDefault();
 
