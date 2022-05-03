@@ -53,13 +53,88 @@ var macTemplate = {
   "border-width": "medium thick thick medium",
   "text-align": "center",
   "clip-path": "polygon(0 0, 0 0, 98% 0, 100% 2%, 100% 100%, 100% 100%, 2% 100%, 0% 98%, 0% 0%)"
-}
+};
+
+var articleTemplate = {
+  "class": "draggableArticle",
+  "id": "article",
+  "header": {
+    "header-class": "draggableArticleHeader",
+    "header-id": "articleHeader",
+    "header-text": "",
+    "header-padding": "10px",
+    "header-cursor": "move",
+    "header-z-index": "10",
+    "header-background-color": "#FFFFFF",
+    "header-border": "#000000",
+    "header-border-style": "none none double none",
+    "header-border-width": "none none medium none",
+    "header-color": "#000000",
+    "header-pointer-events": "none"
+    },
+  "footer": {
+    "footer-class": "draggableArticleFooter",
+    "footer-id": "articleFooter",
+    "footer-border": "#000000",
+    "footer-background-color": "#FFFFFF",
+    "footer-z-index": "10",
+    "footer-padding": "10px",
+    "footer-border-style": "solid none none none",
+    "footer-border-top-width": "medium",
+    "footer-color": "#000000"
+    },
+  "touch-action": "none",
+  "user-select": "none",
+  "margin": "20px",
+  "background-color": "#FFFFFF",
+  "border": "solid #000000",
+  "border-width": "medium thick thick medium",
+  "text-align": "center",
+  "clip-path": "polygon(0 0, 0 0, 98% 0, 100% 2%, 100% 100%, 100% 100%, 2% 100%, 0% 98%, 0% 0%)"
+};
+
+var articleLinks = {
+  "1": {
+    "title": "Insteon is down and may not be coming back",
+    "link": "https://staceyoniot.com/insteon-is-down-and-may-not-be-coming-back/"
+  },
+  "2": {
+    "link": "https://www.youtube.com/watch?v=5cWck_xcH64",
+    "title": "Defcon 20 - Dan Tentler - Drinking from the caffeine firehose we know as shodan"
+  },
+  "3": {
+    "link": "https://www.asisonline.org/security-management-magazine/articles/2017/03/outdated-protocols-and-practices-put-the-iot-revolution-at-risk/",
+    "title": "Outdated Protocols and Practices Put the IoT Revolution at Risk"
+  },
+  "4": {
+    "link": "https://www.forbes.com/sites/hodfleishman/2020/01/07/its-2020-lets-stop-saying-iot/?sh=2992663e73dd",
+    "title": "It’s 2020. Let’s Stop Saying “IoT.” (Part I)"
+  },
+  "5": {
+    "link": "https://spectrum.ieee.org/the-internet-of-trash-iot-has-a-looming-ewaste-problem",
+    "title": "The Internet of Trash: IoT Has a Looming E-Waste Problem "
+  },
+  "6": {
+    "link": "https://spectrum.ieee.org/the-iots-ewaste-problem-isnt-inevitable",
+    "title": "The IoT’s E-Waste Problem Isn’t Inevitable"
+  },
+  "7": {
+    "link": "https://spectrum.ieee.org/the-cybersecurity-of-e-waste",
+    "title": "E-Waste Is a Cybersecurity Problem, Too"
+  },
+  "8": {
+    "link": "https://dl.acm.org/doi/abs/10.1145/3393914.3395918?casa_token=G90g3ie2qTAAAAAA:hyQCcdeeBWy-Xlliclt3fm7WDfawBUzK3Ii2RQJqO8ln0VF54i5iy18L1_fP45eOluAr1vjXZQE",
+    "title": "Designing for the End of Life of IoT Objects"
+  }
+};
 
 //THINGS TO DO:
 //* Make divs load only in area inside 'desktop'
 //* Update checkOverlap function so that it matchs random tuples from list
 var num_mac = Math.floor(Math.random() * (10 - 4) + 4); //min = 4 max = 8
 num_mac = (Math.floor(num_mac / 2)) * 2;
+var mac_print_flag = "False";
+article_index = 1;
 document.addEventListener("DOMContentLoaded", function(){
   container = document.querySelector("#container");
   startLink = document.querySelector("#startlink");
@@ -111,7 +186,12 @@ document.addEventListener("DOMContentLoaded", function(){
     };
     console.log("END OF LISTENER");
   });
-  window.addEventListener("click", print);
+  window.addEventListener("click", function(){
+    if (mac_print_flag == "True"){
+      addArticleElements(articleTemplate, articleLinks, article_index);
+      article_index += 1;
+    };
+  });
 });
 
 function addMacElements(template, num){
@@ -166,12 +246,66 @@ function addMacElements(template, num){
     newMacElement.appendChild(newMacFooter);
 
     container.appendChild(newMacElement);
+    mac_print_flag = "True";
   }
 }
 
-function print(){
-  console.log("HELLLLLLLLLLLO)");
+function addArticleElements(articleTemplate, articleLinks, index){
+  console.log(index);
+  let newArticleElement = document.createElement("DIV");
+  newArticleElement.classList.add(articleTemplate['class']);
+  let newId = articleTemplate['id'] + index.toString();
+  newArticleElement.setAttribute("id", newId);
+  newArticleElement.style.touchAction = articleTemplate['touch-action'];
+  newArticleElement.style.userSelect = articleTemplate['user-select'];
+  newArticleElement.style.margin = articleTemplate['margin'];
+  newArticleElement.style.backgroundColor = articleTemplate['background-color'];
+  newArticleElement.style.border = articleTemplate['border'];
+  newArticleElement.style.borderWidth = articleTemplate['border-width'];
+  newArticleElement.style.textAlign = articleTemplate['text-align'];
+  newArticleElement.style.clipPath = articleTemplate['clip-path'];
+
+  let newArticleHeader = document.createElement("DIV");
+  newArticleHeader.classList.add(articleTemplate['header']['header-class']);
+  let newHeaderId = articleTemplate['header']['header-id'] + index.toString();
+  newArticleHeader.setAttribute("id", newHeaderId);
+  newArticleHeader.style.padding = articleTemplate['header']['header-padding'];
+  newArticleHeader.style.cursor = articleTemplate['header']['header-cursor'];
+  newArticleHeader.style.zIndex = articleTemplate['header']['header-z-index'];
+  newArticleHeader.style.backgroundColor = articleTemplate['header']['header-background-color'];
+  newArticleHeader.style.border = articleTemplate['header']['header-border'];
+  newArticleHeader.style.borderStyle = articleTemplate['header']['header-border-style'];
+  newArticleHeader.style.borderWidth = articleTemplate['header']['header-border-width'];
+  newArticleHeader.style.color = articleTemplate['header']['header-color'];
+  newArticleHeader.style.pointerEvents = articleTemplate['header']['header-pointer-events'];
+  newArticleElement.appendChild(newArticleHeader);
+
+  let newArticleBody = document.createElement("p");
+  newArticleBody.innerText = articleLinks[index]['title'];
+  newArticleBody.pointerEvents = 'none';
+
+  let newArticleLink = document.createElement("LINK");
+  newArticleLink.setAttribute("href", articleLinks[index]['link']);
+  newArticleBody.appendChild(newArticleLink);
+
+  newArticleElement.appendChild(newArticleBody);
+
+  let newArticleFooter = document.createElement("DIV");
+  newArticleFooter.classList.add(articleTemplate['footer']['footer-class']);
+  let newFooterId = articleTemplate['footer']['footer-id'] + index.toString();
+  newArticleFooter.setAttribute("id", newFooterId);
+  newArticleFooter.style.border = articleTemplate['footer']['footer-border'];
+  newArticleFooter.style.backgroundColor = articleTemplate['footer']['footer-background-color'];
+  newArticleFooter.style.zIndex = articleTemplate['footer']['footer-z-index'];
+  newArticleFooter.style.padding = articleTemplate['footer']['footer-padding'];
+  newArticleFooter.style.borderStyle = articleTemplate['footer']['footer-border-style'];
+  newArticleFooter.style.borderTopWidth = articleTemplate['footer']['footer-border-top-width'];
+  newArticleFooter.style.color = articleTemplate['footer']['footer-color'];
+  newArticleElement.appendChild(newArticleFooter);
+
+  container.appendChild(newArticleElement);
 }
+
 
 function dragStart(e) {
 
@@ -311,6 +445,7 @@ Items that have no overlap have black borders.
 */
 var mac_index = [];
 var mac_tuple = [];
+var flag_items = {};
 function mac_pairs(num_mac) {
   for (let i = 1; i <= num_mac; i++){
     mac_index.push('item' + i);
@@ -330,13 +465,12 @@ function mac_pairs(num_mac) {
 
 
 function checkOverlap(el) {
-  var flag_items = {}
+  var flag_items = {};
   for (let i = 0; i < num_mac; i++){
     flag_items[mac_index[i]] = "False";
   }
   /* CHECK FOR OVERLAP */
   for (item of dragItems) {
-
     /* Logic to not check against itself */
     if (item != el) {
       /* Bounding box of currently dragging element */
@@ -349,6 +483,38 @@ function checkOverlap(el) {
         rect1.left > rect2.right ||
         rect1.bottom < rect2.top ||
         rect1.top > rect2.bottom)
+      if (overlap){
+        for (let i = 0; i < mac_tuple.length; i++){
+          if ((item.id == mac_tuple[i][0]) || (item.id == mac_tuple[i][1])) {
+            if ((el.id == mac_tuple[i][0]) || (el.id == mac_tuple[i][1])) {
+              item.style.borderColor = "#00ee00"; //green
+              el.style.borderColor = "#00ee00";
+              flag_items[item.id] = "True";
+              flag_items[el.id] = "True";
+            }
+          }
+          else {
+            if (flag_items[item.id] == "False"){
+              item.style.borderColor = "#dd0000";
+              flag_items[item.id] = "True";
+            }
+            if (flag_items[el.id] == "False"){
+              el.style.borderColor = "#dd0000"; //red
+              flag_items[el.id] = "True";
+            }
+          }
+        }
+      }
+      if (!overlap){
+        //console.log("NOT OVERLAPPING");
+
+        if (flag_items[item.id] == "False"){
+          item.style.borderColor = "#000000";
+        }
+        if (flag_items[el.id] == "False"){
+          el.style.borderColor = "#000000";
+        }
+      }
       /* If item and el are not overlapping, set them to borderColor = black */
       /*
       if (!overlap) {
@@ -368,36 +534,6 @@ function checkOverlap(el) {
       */
       /* PROF NOTE: Here we confirm the overlap and can fire off specific behavior based
                   on the matching IDs */
-      if (overlap){
-        itemA = document.getElementById(item.id);
-        itemB = document.getElementById(el.id);
-        for (let i = 0; i < mac_tuple.length; i++){
-          if ((item.id == mac_tuple[i][0]) || (item.id == mac_tuple[i][1])) {
-            if ((el.id == mac_tuple[i][0]) || (el.id == mac_tuple[i][1])) {
-              itemA.style.borderColor = "#00ee00"; //green
-              itemB.style.borderColor = "#00ee00";
-              flag_items[item.id] = "True";
-              flag_items[el.id] = "True";
-            }
-          }
-          else {
-            itemA.style.borderColor = "#dd0000"; //red
-            itemB.style.borderColor = "#dd0000"; //red
-            flag_items[item.id] = "True";
-            flag_items[el.id] = "True";
-          }
-        }
-      }
-      if (!overlap){
-        console.log("NOT OVERLAPPING");
-
-        if (flag_items[item.id] == "False"){
-          item.style.borderColor = "#000000";
-        }
-        if (flag_items[el.id] == "False"){
-          el.style.borderColor = "#000000";
-        }
-      }
       // for (let i = 0; i < num_mac; i += 2){
       //   itemA = document.getElementById(mac_index[i]);
       //   itemB = document.getElementById(mac_index[i+1]);
