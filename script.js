@@ -283,12 +283,12 @@ function addArticleElements(articleTemplate, articleLinks, index){
   let newArticleBody = document.createElement("p");
   newArticleBody.innerText = articleLinks[index]['title'];
   newArticleBody.pointerEvents = 'none';
-
-  let newArticleLink = document.createElement("LINK");
-  newArticleLink.setAttribute("href", articleLinks[index]['link']);
-  newArticleBody.appendChild(newArticleLink);
-
   newArticleElement.appendChild(newArticleBody);
+
+  let newArticleLink = document.createElement("A");
+  newArticleLink.setAttribute("href", articleLinks[index]['link']);
+  newArticleElement.appendChild(newArticleLink);
+
 
   let newArticleFooter = document.createElement("DIV");
   newArticleFooter.classList.add(articleTemplate['footer']['footer-class']);
